@@ -1,0 +1,38 @@
+<div x-data="{
+    id: '{{ entry.id }}',
+    init() {
+        $store.favorites.initialize()
+    }
+}">
+
+    <div x-show="!$store.favorites.loggedIn">
+        <button type="button"
+                class="favorite-button"
+                title="Add to favorites"
+                @click="alert('Login to use favorites')"
+        >
+            {{ svg('@wsydney76/favorites/icons/star-outline.svg') }}
+        </button>
+    </div>
+
+    <div x-show="$store.favorites.loggedIn">
+        <button type="button"
+                class="favorite-button"
+                title="Add to favorites"
+                x-show="!$store.favorites.ids.includes(parseInt(id))"
+                @click="$store.favorites.add(parseInt(id))"
+        >
+            {{ svg('@wsydney76/favorites/icons/star-outline.svg') }}
+        </button>
+
+        <button type="button"
+                class="favorite-button"
+                title="Remove from favorites"
+                x-show="$store.favorites.ids.includes(parseInt(id))"
+                @click="$store.favorites.remove(parseInt(id))"
+        >
+            {{ svg('@wsydney76/favorites/icons/star-solid.svg') }}
+        </button>
+    </div>
+
+</div>
