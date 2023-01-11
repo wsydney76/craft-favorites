@@ -25,8 +25,8 @@ class Install extends Migration
             'id' => $this->primaryKey(),
             'userId' => $this->integer()->notNull(),
             'entryId' => $this->integer()->notNull(),
-            'dateCreated' => $this->date()->notNull(),
-            'dateUpdated' => $this->date()->notNull(),
+            'dateCreated' => $this->dateTime()->notNull(),
+            'dateUpdated' => $this->dateTime()->notNull(),
             'uid' => $this->uid()->notNull()
         ]);
 
