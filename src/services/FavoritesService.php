@@ -24,6 +24,7 @@ class FavoritesService extends Component
         return UserToEntries::find()
             ->select('entryId')
             ->where(['userId' => $currentUser->id])
+            ->orderBy('entryId')
             ->column();
     }
 

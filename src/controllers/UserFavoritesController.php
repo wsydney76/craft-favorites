@@ -8,9 +8,7 @@ use craft\web\Controller;
 use wsydney76\favorites\models\Favorites;
 use wsydney76\favorites\Plugin;
 use wsydney76\favorites\records\UserToEntries;
-use yii\base\InvalidArgumentException;
 use yii\web\Response;
-use function sleep;
 
 /**
  * Favorites controller
@@ -80,6 +78,23 @@ class UserFavoritesController extends Controller
             $this->getData(),
             Craft::t('favorites', 'Removed from favorites'),
             'favorites');
+    }
+
+    public function actionGetEntries()
+    {
+
+        $orderBy = Craft::$app->request->getQueryParam('orderBy', 'title');
+        $entries = Plugin::getInstance()->favoritesService->getEntries($orderBy);
+
+        return $this->asJson($entries->map(fn(Entry $entry) => [
+            'id' => $entry->id,
+            'title' => $entry->title,
+            'url' => $entry->url,
+            'sectionHandle' => $entry->section->handle,
+            'sectionName' => $entry->section->name,
+            'typeHandle' => $entry->type->handle,
+            'typeName' => $entry->type->name,
+        ]));
     }
 
 

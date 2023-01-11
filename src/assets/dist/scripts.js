@@ -6,6 +6,7 @@ document.addEventListener('alpine:init', () => {
         loggedIn: false,
         message: '',
         messageForId: 0,
+        timeoutId: '',
         ids: [],
 
         async initialize(baseUrl = '') {
@@ -56,12 +57,18 @@ document.addEventListener('alpine:init', () => {
 
             const data = await response.json()
 
+            if (this.timeoutId) {
+                clearTimeout(this.timeoutId)
+            }
+
             this.loggedIn = data.favorites.loggedIn
             this.ids = data.favorites.ids
-            this.message = data.message
             this.messageForId = id
-            if(id) {
-                setTimeout(() => this.messageForId = 0, 3000)
+            this.message = data.message
+            if (id) {
+                this.timeoutId = setTimeout(() =>
+                        this.messageForId = 0
+                    , 3000)
             }
         },
 
