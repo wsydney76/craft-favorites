@@ -1,0 +1,51 @@
+{% set settings = craft.app.plugins.plugin('favorites').settings %}
+
+<div class="favorite-wrapper"
+        x-data="{
+    id: {{ entry.id }},
+    addText: '{{ 'Add to favorites'|t('favorites') }}',
+    removeText: '{{ 'Remove from favorites'|t('favorites') }}',
+    init() {
+        $store.favorites.initialize()
+    }
+}">
+
+    <div x-show="!$store.favorites.loggedIn">
+        <button type="button"
+                class="favorite-button"
+                :title="addText"
+                @click="alert('Login to use favorites')"
+        >
+            {{ svg('@wsydney76/favorites/icons/star-outline.svg')|attr({stroke: settings.starColor}) }}
+        </button>
+    </div>
+
+    <div x-show="$store.favorites.loggedIn">
+        <button type="button"
+                class="favorite-button"
+                :title="addText"
+                x-show="!$store.favorites.ids.includes(id)"
+                @click="$store.favorites.add(id)"
+        >
+            {{ svg('@wsydney76/favorites/icons/star-outline.svg')|attr({stroke: settings.starColor}) }}
+        </button>
+
+        <button type="button"
+                class="favorite-button"
+                :title="removeText"
+                x-show="$store.favorites.ids.includes(id)"
+                @click="$store.favorites.remove(id)"
+        >
+            {{ svg('@wsydney76/favorites/icons/star-solid.svg')|attr({fill: settings.starColor}) }}
+        </button>
+    </div>
+
+
+    <div class="favorite-message"
+         style="display: none"
+         x-show="$store.favorites.messageForId === id"
+         x-text="$store.favorites.message"
+         x-transition.duration.500ms
+    ></div>
+
+</div>

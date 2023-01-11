@@ -7,8 +7,10 @@ use craft\base\Model;
 use craft\base\Plugin as BasePlugin;
 use craft\events\RegisterTemplateRootsEvent;
 use craft\helpers\App;
+use craft\web\twig\variables\CraftVariable;
 use craft\web\View;
 use wsydney76\favorites\models\Settings;
+use wsydney76\favorites\services\FavoritesService;
 use yii\base\Event;
 
 /**
@@ -19,6 +21,7 @@ use yii\base\Event;
  * @author wsydney76 <wsydney@web.de>
  * @copyright wsydney76
  * @license MIT
+ * @property-read FavoritesService $favoritesService
  */
 class Plugin extends BasePlugin
 {
@@ -28,9 +31,7 @@ class Plugin extends BasePlugin
     public static function config(): array
     {
         return [
-            'components' => [
-                // Define component configs here...
-            ],
+            'components' => ['favoritesService' => FavoritesService::class],
         ];
     }
 
@@ -69,5 +70,17 @@ class Plugin extends BasePlugin
                 $event->roots['@favorites'] = $this->getBasePath() . '/templates';
             }
         );
+
+        Event::on(
+            CraftVariable::class,
+            CraftVariable::EVENT_INIT,
+            function(Event $e) {
+                /** @var CraftVariable $variable */
+                $variable = $e->sender;
+
+                $variable->set('favorites', FavoritesService::class);
+            }
+        );
+
     }
 }

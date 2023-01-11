@@ -3,4 +3,12 @@
 
 {% import '_includes/forms.twig' as forms %}
 
-{# ... #}
+{{ forms.colorField({
+    label: 'Star Color',
+    name: 'starColor',
+    value: settings.starColor,
+    instructions: 'The color used for the star icon',
+    tip: 'Default: #ca8a04',
+    required: true,
+    errors: settings.errors('starColor')
+}) }}

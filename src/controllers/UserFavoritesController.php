@@ -5,6 +5,8 @@ namespace wsydney76\favorites\controllers;
 use Craft;
 use craft\elements\Entry;
 use craft\web\Controller;
+use wsydney76\favorites\models\Favorites;
+use wsydney76\favorites\Plugin;
 use wsydney76\favorites\records\UserToEntries;
 use yii\base\InvalidArgumentException;
 use yii\web\Response;
@@ -27,7 +29,7 @@ class UserFavoritesController extends Controller
 
     public function actionGet(): Response
     {
-        return $this->asJson($this->getData());
+        return $this->asModelSuccess($this->getData(), 'Init', 'favorites');
     }
 
     public function actionAdd(): Response
@@ -55,7 +57,10 @@ class UserFavoritesController extends Controller
 
         $record->save();
 
-        return $this->asJson($this->getData());
+        return $this->asModelSuccess(
+            $this->getData(),
+            Craft::t('favorites', 'Added to favorites'),
+            'favorites');
     }
 
     public function actionRemove(): Response
@@ -71,33 +76,26 @@ class UserFavoritesController extends Controller
             'entryId' => $id
         ]);
 
-
-        return $this->asJson($this->getData());
+        return $this->asModelSuccess(
+            $this->getData(),
+            Craft::t('favorites', 'Removed from favorites'),
+            'favorites');
     }
 
 
-    protected function getData(string $message = ''): array
+    protected function getData(string $message = ''): Favorites
     {
         $currentUser = Craft::$app->user->identity;
 
         if (!$currentUser) {
-            return [
-                'loggedIn' => false,
-                'ids' => [],
-                'message' => ''
-            ];
+            return new Favorites();
         }
 
-        $ids = UserToEntries::find()
-            ->select('entryId')
-            ->where(['userId' => $currentUser->id])
-            ->column()
-        ;
+        $ids = Plugin::getInstance()->favoritesService->getIds();
 
-        return [
+        return new Favorites([
             'loggedIn' => true,
-            'ids' => $ids,
-            'message' => $message
-        ];
+            'ids' => $ids
+        ]);
     }
 }

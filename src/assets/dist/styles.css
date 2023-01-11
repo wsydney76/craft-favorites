@@ -1,5 +1,20 @@
+.favorite-wrapper {
+    position: relative;
+}
+
 .favorite-button {
     padding-top: 6px;
     height: 18px;
     width: 18px;
+}
+
+.favorite-message {
+    position: absolute;
+    background-color: #666666;
+    color: white;
+    padding: 4px;
+    width: 200px;
+    left: -80px;
+    text-align: center;
+    border-radius: 4px;
 }

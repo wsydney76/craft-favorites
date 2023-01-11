@@ -1,19 +1,23 @@
 document.addEventListener('alpine:init', () => {
     Alpine.store('favorites', {
-        initialized: false,
-        initializing: false,
+        isInitialized: false,
+        isInitializing: false,
         loggedIn: false,
+        message: '',
+        messageForId: 0,
         ids: [],
 
         async initialize() {
-            if (this.initialized || this.initializing) return
+            if (this.isInitialized || this.isInitializing) {
+                return
+            }
 
-            this.initializing = true
+            this.isInitializing = true
 
             this.sendActionRequest('get')
 
-            this.initializing = false
-            this.initialized = true
+            this.isInitializing = false
+            this.isInitialized = true
         },
 
         async add(id) {
@@ -24,24 +28,48 @@ document.addEventListener('alpine:init', () => {
             this.sendActionRequest('remove', id)
         },
 
-        async sendActionRequest(action, id=null) {
+        async sendActionRequest(action, id = 0) {
             url = '/actions/favorites/user-favorites/' + action;
             if (id) {
                 url += '?id=' + id
             }
 
-            const response = await fetch(url,{
+            const response = await fetch(url, {
                 headers: {
                     'Accept': 'application/json'
                 }
             })
 
-            const data = await response.json()
-            this.loggedIn = data.loggedIn
-            this.ids = data.ids
-            if (data.message) {
-                alert(data.message)
+            if (!response.ok) {
+                const errorText = await response.text();
+                if (this.isJson(errorText)) {
+                    errorData = JSON.parse(errorText)
+                    alert(`Error! status: ${response.status} message: ${errorData.message}`)
+                } else {
+                    //report the error
+                    alert(`Error! status: ${response.status} message: ${errorText}`)
+                }
+                return
             }
+
+            const data = await response.json()
+
+            this.loggedIn = data.favorites.loggedIn
+            this.ids = data.favorites.ids
+            this.message = data.message
+            this.messageForId = id
+            if(id) {
+                setTimeout(() => this.messageForId = 0, 3000)
+            }
+        },
+
+        isJson(str) {
+            try {
+                JSON.parse(str);
+            } catch (e) {
+                return false;
+            }
+            return true;
         }
 
     })
