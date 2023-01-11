@@ -2,17 +2,19 @@ document.addEventListener('alpine:init', () => {
     Alpine.store('favorites', {
         isInitialized: false,
         isInitializing: false,
+        baseUrl: '',
         loggedIn: false,
         message: '',
         messageForId: 0,
         ids: [],
 
-        async initialize() {
+        async initialize(baseUrl = '') {
             if (this.isInitialized || this.isInitializing) {
                 return
             }
 
             this.isInitializing = true
+            this.baseUrl = baseUrl
 
             this.sendActionRequest('get')
 
@@ -29,7 +31,7 @@ document.addEventListener('alpine:init', () => {
         },
 
         async sendActionRequest(action, id = 0) {
-            url = '/actions/favorites/user-favorites/' + action;
+            url = this.baseUrl + 'actions/favorites/user-favorites/' + action;
             if (id) {
                 url += '?id=' + id
             }

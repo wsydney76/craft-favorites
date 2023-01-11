@@ -1,12 +1,11 @@
 {% set settings = craft.app.plugins.plugin('favorites').settings %}
-
 <div class="favorite-wrapper"
         x-data="{
     id: {{ entry.id }},
     addText: '{{ 'Add to favorites'|t('favorites') }}',
     removeText: '{{ 'Remove from favorites'|t('favorites') }}',
     init() {
-        $store.favorites.initialize()
+        $store.favorites.initialize('{{ currentSite.baseUrl }}')
     }
 }">
 
