@@ -78,7 +78,7 @@ $entries = Plugin::getInstance()->favoritesService->getEntries();
 $ids = Plugin::getInstance()->favoritesService->getIds();
 ```
 
-Note: Obviosly this will not on cached pages.
+Note: Obviously this will not work on cached pages.
 
 See API.
 
