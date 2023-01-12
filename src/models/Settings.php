@@ -12,6 +12,7 @@ use craft\validators\ColorValidator;
 class Settings extends Model
 {
     public string $starColor = '#ca8a04';
+    public bool $loadAssets = true;
 
     public function rules(): array
     {

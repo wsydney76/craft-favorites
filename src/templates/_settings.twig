@@ -12,3 +12,11 @@
     required: true,
     errors: settings.errors('starColor')
 }) }}
+
+{{ forms.lightswitchField({
+    label: 'Load Assets',
+    name: 'loadAssets',
+    on: settings.loadAssets,
+    instructions: 'Whether the plugin should load its own JavaScript and CSS assets.',
+    warning: 'If set to off, your project must include the assets into its own asset bundle.<br> And keep them up to date.'
+}) }}

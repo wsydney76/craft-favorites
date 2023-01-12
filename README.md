@@ -84,7 +84,19 @@ See API.
 
 ## Settings
 
-* Change the color of the star icons in the plugin settings.
+### Star Color 
+
+Change the color of the star icons in the plugin settings.
+
+### Load Assets
+
+Whether the plugin should load its own JavaScript and CSS assets.
+
+True by default, this will add additional requests to your site (1x js, 1x css).
+
+If set to false, your project must include them in to its own asset bundle.
+
+Assets live in `vendor/wsydney76/craft-favorites/src/assets/dist`, they don't need a build step.
 
 ## API
 

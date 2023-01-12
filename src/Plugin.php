@@ -12,6 +12,7 @@ use craft\web\View;
 use wsydney76\favorites\models\Settings;
 use wsydney76\favorites\services\FavoritesService;
 use yii\base\Event;
+use wsydney76\favorites\assets\FavoritesAsset;
 
 /**
  * Favorites plugin
@@ -61,7 +62,9 @@ class Plugin extends BasePlugin
 
     private function attachEventHandlers(): void
     {
-        Craft::$app->view->registerAssetBundle('wsydney76\\favorites\\assets\\FavoritesAsset');
+        if ($this->getSettings()->loadAssets) {
+            Craft::$app->view->registerAssetBundle(FavoritesAsset::class);
+        }
 
         Event::on(
             View::class,
