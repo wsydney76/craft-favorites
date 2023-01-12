@@ -42,8 +42,8 @@
 
     <div class="favorite-message"
          style="display: none"
-         x-show="$store.favorites.messageForId === id"
-         x-text="$store.favorites.message"
+         x-show="$store.favorites.showMessage[id]"
+         x-text="$store.favorites.message[id]"
          x-transition.duration.500ms
     ></div>
 

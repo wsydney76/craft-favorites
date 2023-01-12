@@ -4,8 +4,8 @@ document.addEventListener('alpine:init', () => {
         isInitializing: false,
         baseUrl: '',
         loggedIn: false,
-        message: '',
-        messageForId: 0,
+        message: [],
+        showMessage: [],
         timeoutId: '',
         ids: [],
 
@@ -57,17 +57,17 @@ document.addEventListener('alpine:init', () => {
 
             const data = await response.json()
 
-            if (this.timeoutId) {
-                clearTimeout(this.timeoutId)
-            }
-
             this.loggedIn = data.favorites.loggedIn
             this.ids = data.favorites.ids
-            this.messageForId = id
-            this.message = data.message
+            this.showMessagePopup(id, data.message)
+        },
+
+        showMessagePopup(id, message) {
+            this.showMessage[id] = true
+            this.message[id] = message
             if (id) {
-                this.timeoutId = setTimeout(() =>
-                        this.messageForId = 0
+                setTimeout(() =>
+                        this.showMessage[id] = false
                     , 3000)
             }
         },
